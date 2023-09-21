@@ -24,16 +24,16 @@ This Python script allows users to convert prices from any currency to Polish Zl
 To run the script, execute it with the desired mode and input parameters:
 
 ```shell
-python currency_converter.py --source <source> --mode <mode>
+python currency_converter.py --mode <mode> --source <source>
 
 **Examples:**
 
 ```shell
 # Example 1: Using local JSON data in development mode
-python currency_converter.py --source local --mode dev
+python -m task --mode dev --source local
 
 # Example 2: Using NBP API data in production mode
-python currency_converter.py --source api --mode prod
+python -m task --mode prod --source api
 
 ### Requirements
 
