@@ -1,4 +1,7 @@
 import requests
+from task.logger import get_logger
+
+logger = get_logger(__name__, "nbp_api.log")
 
 
 class NBPApiConnector:
@@ -23,12 +26,12 @@ class NBPApiConnector:
                 }
                 return rates_data
             else:
-                print(
+                logger.error(
                     f"Failed to fetch currency rate for {currency_code}. Status code: {response.status_code}. Error: {response.text}"
                 )
                 return {}
-        except Exception as error:
-            print(
-                f"An error occurred while fetching currency rate for {currency_code} from NBP API: {error}"
+        except Exception as err:
+            logger.error(
+                f"An error occurred while fetching currency rate for {currency_code} from NBP API: {err}"
             )
             return {}

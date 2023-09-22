@@ -1,5 +1,8 @@
 import json
 from task.config import JSON_DATABASE_NAME
+from task.logger import get_logger
+
+logger = get_logger(__name__, "json_database.log")
 
 
 class JsonFileDatabaseConnector:
@@ -12,8 +15,8 @@ class JsonFileDatabaseConnector:
             with open(JSON_DATABASE_NAME, "r") as file:
                 data = json.load(file)
             return data
-        except FileNotFoundError:
-            print(f"File {JSON_DATABASE_NAME} not found")
+        except FileNotFoundError as err:
+            logger.error(f"File {JSON_DATABASE_NAME} not found: {err}")
             return {}
 
     def save(self, entity: dict) -> int:
@@ -32,6 +35,7 @@ class JsonFileDatabaseConnector:
         with open(JSON_DATABASE_NAME, "w") as file:
             json.dump(data, file, indent=4)
 
+        logger.info(f"Data with ID {new_id} saved successfully to the JSON database")
         return new_id
 
     def get_all(self) -> dict[dict]:
@@ -40,4 +44,7 @@ class JsonFileDatabaseConnector:
 
     def get_by_id(self, entity_id: int) -> dict:
         data = self._read_data()
-        return data.get(str(entity_id), {})
+        entity_data = data.get(str(entity_id), {})
+        if not entity_data:
+            logger.warning(f"Data with ID {entity_id} not found in the JSON database")
+        return entity_data

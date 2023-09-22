@@ -28,3 +28,7 @@ db.sqlite3-journal
 # Environments
 .env
 env/
+
+# Logs
+*.log
+logs/

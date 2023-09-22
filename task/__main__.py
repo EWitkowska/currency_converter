@@ -5,9 +5,12 @@ from task.connectors.database.json import JsonFileDatabaseConnector
 from task.connectors.database.sqlite import SqliteDatabaseConnector
 from task.currency_converter import PriceCurrencyConverterToPLN
 from .arguments import ArgumentParser
+from .logger import get_logger
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+log_file = "currency_converter.log"
+logger = get_logger(__name__, log_file)
+
+logger.info("Script started")
 
 
 def main():
@@ -18,11 +21,9 @@ def main():
     example_currency_rates_file_path = base_dir / "example_currency_rates.json"
 
     print(
-        "This script allows you to convert prices from any currency to Polish Zloty (PLN)."
-    )
-    print("You can choose between two data sources: local or API (NBP).")
-    print(
-        "The converted amount will be saved to an appropriate database based on your selection.\n"
+        "This script allows you to convert prices from any currency to Polish Zloty (PLN)\n"
+        "You can choose between two data sources: local or API (NBP)\n"
+        "The converted amount will be saved to an appropriate database based on your selection\n"
     )
 
     currency = str(input("Enter the currency code (e.g., EUR): "))
@@ -65,10 +66,12 @@ def main():
             print("\nFailed to retrieve saved data\n")
 
     except ValueError as err:
-        print(f"\nError: {err}")
+        logger.error(f"ValueError: {err}")
     except Exception as err:
-        print(f"\nAn unexpected error occurred: {err}")
+        logger.error(f"An unexpected error occurred: {err}")
+        logger.exception("Traceback:")
 
 
 if __name__ == "__main__":
     main()
+    logger.info("Job done!")

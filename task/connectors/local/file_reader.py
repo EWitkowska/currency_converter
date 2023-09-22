@@ -1,4 +1,7 @@
 import json
+from task.logger import get_logger
+
+logger = get_logger(__name__, "local_file_reader.log")
 
 
 class LocalFileReader:
@@ -10,6 +13,9 @@ class LocalFileReader:
             with open(self.filename, "r") as file:
                 data = json.load(file)
             return data
-        except FileNotFoundError:
-            print(f"File {self.filename} not found")
+        except FileNotFoundError as err:
+            logger.error(f"File {self.filename} not found: {err}")
+            return {}
+        except json.JSONDecodeError as err:
+            logger.error(f"Error decoding JSON in file {self.filename}: {err}")
             return {}

@@ -4,6 +4,9 @@ from sqlalchemy import create_engine, Column, Integer, String, Float, Date
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from task.config import SQLITE_DATABASE_NAME
+from task.logger import get_logger
+
+logger = get_logger(__name__, "sqlite_database.log")
 
 Base = declarative_base()
 
@@ -29,12 +32,14 @@ class SqliteDatabaseConnector:
     def create_database(self):
         if not self.database_path.exists():
             self.database_path.touch()
-            print(f"SQLite database file '{self.database_path}' created successfully.")
+            logger.info(
+                f"SQLite database file '{self.database_path}' created successfully"
+            )
             Base.metadata.create_all(self.engine)
-            print("Database tables initialized.")
+            logger.info("Database tables initialized")
         else:
-            print(
-                f"SQLite database file '{self.database_path}' already exists. Skipping creation."
+            logger.info(
+                f"SQLite database file '{self.database_path}' already exists. Skipping creation"
             )
 
     def save(self, entity: dict) -> int:
@@ -47,17 +52,18 @@ class SqliteDatabaseConnector:
             )
             self.session.add(conversion)
             self.session.commit()
+            logger.info("Data saved successfully to the database")
             return conversion.id
-        except Exception as e:
-            print(f"SQLite error: {e}")
+        except Exception as err:
+            logger.error(f"SQLite error: {err}")
             self.session.rollback()
             return -1
 
     def get_all(self) -> list[CurrencyConversion]:
         try:
             return self.session.query(CurrencyConversion).all()
-        except Exception as e:
-            print(f"SQLite error: {e}")
+        except Exception as err:
+            logger.error(f"SQLite error: {err}")
             return []
 
     def get_by_id(self, entity_id: str) -> CurrencyConversion:
@@ -66,6 +72,6 @@ class SqliteDatabaseConnector:
                 self.session.query(CurrencyConversion).filter_by(id=entity_id).first()
             )
             return data
-        except Exception as error:
-            print(f"SQLite error: {error}")
+        except Exception as err:
+            logger.error(f"SQLite error: {err}")
             return CurrencyConversion()
