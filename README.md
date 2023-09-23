@@ -8,6 +8,7 @@ This Python script allows users to convert prices from any currency to Polish Zl
    - Currency code (e.g., EUR)
    - Amount to convert
    - Source of currency exchange rates (local JSON or NBP API)
+   - Script execution mode (Test - Dev or Production - Prod)
 
 2. **Exchange Rate Fetching**: The script fetches the latest currency exchange rates from the selected source:
    - Local JSON file: `example_currency_rates.json`
@@ -23,12 +24,12 @@ This Python script allows users to convert prices from any currency to Polish Zl
 
 To run the script, execute it with the desired mode and input parameters:
 
-```shell
+```bash
 python -m task --mode <mode> --source <source>
 
 **Examples:**
 
-```shell
+```bash
 # Example 1: Using local JSON data in development mode
 python -m task --mode dev --source local
 
@@ -41,7 +42,8 @@ Before running the Currency Conversion script, please ensure the following requi
 
 - **Python 3.8+**: Make sure you have Python version 3.8 or higher installed on your system.
 
-To install the required Python packages, you can use `pip` and the provided `requirements.txt` file. Navigate to the project directory in your terminal and run the following command:
+To install the required Python packages, you can use `pip` and the provided `requirements.txt` file.
+Navigate to the project directory in your terminal and run the following command:
 
 ```bash
 pip install -r requirements.txt
