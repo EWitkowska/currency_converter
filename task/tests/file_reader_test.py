@@ -35,8 +35,6 @@ class TestLocalFileReader(unittest.TestCase):
             api_connector = LocalFileReader(self.filename, enable_logging=False)
             result = api_connector.read()
 
-            print(result)
-
         self.assertEqual(result, json_data)
 
     def test_read_non_existent_file(self):
