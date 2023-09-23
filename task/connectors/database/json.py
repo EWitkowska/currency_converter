@@ -1,23 +1,20 @@
 import json
 from task.config import JSON_DATABASE_NAME
-from task.logger import get_logger
-
-logger = get_logger(__name__, "json_database.log")
+from task.logger import CustomLogger
 
 
 class JsonFileDatabaseConnector:
-    def __init__(self) -> None:
+    def __init__(self, enable_logging: bool = True) -> None:
+        self.logger = CustomLogger(
+            __name__, "json_database.log", enable_logging=enable_logging
+        ).get_logger()
         self._data = self._read_data()
 
     @staticmethod
     def _read_data() -> dict:
-        try:
-            with open(JSON_DATABASE_NAME, "r") as file:
-                data = json.load(file)
-            return data
-        except FileNotFoundError as err:
-            logger.error(f"File {JSON_DATABASE_NAME} not found: {err}")
-            return {}
+        with open(JSON_DATABASE_NAME, "r") as file:
+            data = json.load(file)
+        return data
 
     def save(self, entity: dict) -> int:
         data = self._read_data()
@@ -35,7 +32,9 @@ class JsonFileDatabaseConnector:
         with open(JSON_DATABASE_NAME, "w") as file:
             json.dump(data, file, indent=4)
 
-        logger.info(f"Data with ID {new_id} saved successfully to the JSON database")
+        self.logger.info(
+            f"Data with ID {new_id} saved successfully to the JSON database"
+        )
         return new_id
 
     def get_all(self) -> dict[dict]:
@@ -46,5 +45,7 @@ class JsonFileDatabaseConnector:
         data = self._read_data()
         entity_data = data.get(str(entity_id), {})
         if not entity_data:
-            logger.warning(f"Data with ID {entity_id} not found in the JSON database")
+            self.logger.warning(
+                f"Data with ID {entity_id} not found in the JSON database"
+            )
         return entity_data

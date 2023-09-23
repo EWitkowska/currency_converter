@@ -2,25 +2,38 @@ import logging
 from pathlib import Path
 
 
-def get_logger(name: str, log_file: str) -> logging.Logger:
-    log_folder = Path("logs")
+class CustomLogger:
+    def __init__(
+        self,
+        name: str,
+        log_file: str,
+        enable_logging: bool = True,
+    ):
+        self.logger = logging.getLogger(name)
+        self.enable_logging = enable_logging
 
-    if not log_folder.exists():
-        log_folder.mkdir()
+        if enable_logging:
+            log_folder = Path("logs")
 
-    log_file_path = log_folder / log_file
+            if not log_folder.exists():
+                log_folder.mkdir()
 
-    logger = logging.getLogger(name)
-    logger.setLevel(logging.WARNING)
+            log_file_path = log_folder / log_file
 
-    file_handler = logging.FileHandler(log_file_path)
-    file_handler.setLevel(logging.INFO)
+            self.logger.setLevel(logging.WARNING)
 
-    formatter = logging.Formatter(
-        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-    )
-    file_handler.setFormatter(formatter)
+            file_handler = logging.FileHandler(log_file_path)
+            file_handler.setLevel(logging.INFO)
 
-    logger.addHandler(file_handler)
+            formatter = logging.Formatter(
+                "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+            )
+            file_handler.setFormatter(formatter)
 
-    return logger
+            self.logger.addHandler(file_handler)
+        else:
+            self.logger.addHandler(logging.NullHandler())
+            self.logger.setLevel(logging.CRITICAL)
+
+    def get_logger(self):
+        return self.logger

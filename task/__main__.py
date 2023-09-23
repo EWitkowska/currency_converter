@@ -1,14 +1,13 @@
 from pathlib import Path
-import logging
 from task.currency_utils import CurrencyDataFetcher
 from task.connectors.database.json import JsonFileDatabaseConnector
 from task.connectors.database.sqlite import SqliteDatabaseConnector
 from task.currency_converter import PriceCurrencyConverterToPLN
 from .arguments import ArgumentParser
-from .logger import get_logger
+from .logger import CustomLogger
 
 log_file = "currency_converter.log"
-logger = get_logger(__name__, log_file)
+logger = CustomLogger(__name__, log_file, enable_logging=True).get_logger()
 
 logger.info("Script started")
 
@@ -56,12 +55,7 @@ def main():
         retrieved_data = currency_data_fetcher.retrieve_data(new_id, db_connector)
 
         if retrieved_data:
-            print("\nConversion data saved successfully to the database\n")
-            print(f"ID: {retrieved_data['id']}")
-            print(f"Currency: {retrieved_data['currency']}")
-            print(f"Rate: {retrieved_data['rate']}")
-            print(f"Price in PLN: {retrieved_data['price_in_pln']}")
-            print(f"Date: {retrieved_data['date']}")
+            print(f"\nConversion price in PLN: {retrieved_data['price_in_pln']}\n")
         else:
             print("\nFailed to retrieve saved data\n")
 

@@ -1,12 +1,13 @@
 import requests
-from task.logger import get_logger
-
-logger = get_logger(__name__, "nbp_api.log")
+from task.logger import CustomLogger
 
 
 class NBPApiConnector:
-    def __init__(self):
+    def __init__(self, enable_logging: bool = True):
         self.base_url = "http://api.nbp.pl/api/exchangerates/rates/A/"
+        self.logger = CustomLogger(
+            __name__, "nbp_api.log", enable_logging=enable_logging
+        ).get_logger()
 
     def fetch_currency_rate(self, currency_code: str) -> dict:
         try:
@@ -26,12 +27,12 @@ class NBPApiConnector:
                 }
                 return rates_data
             else:
-                logger.error(
+                self.logger.error(
                     f"Failed to fetch currency rate for {currency_code}. Status code: {response.status_code}. Error: {response.text}"
                 )
                 return {}
         except Exception as err:
-            logger.error(
+            self.logger.error(
                 f"An error occurred while fetching currency rate for {currency_code} from NBP API: {err}"
             )
             return {}
