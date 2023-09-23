@@ -20,7 +20,7 @@ class CustomLogger:
 
             log_file_path = log_folder / log_file
 
-            self.logger.setLevel(logging.WARNING)
+            self.logger.setLevel(logging.INFO)
 
             file_handler = logging.FileHandler(log_file_path)
             file_handler.setLevel(logging.INFO)
