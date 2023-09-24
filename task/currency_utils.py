@@ -4,9 +4,11 @@ from task.connectors.database.sqlite import CurrencyConversion
 
 
 class CurrencyDataFetcher:
-    def __init__(self, example_currency_rates_file_path: str):
+    def __init__(
+        self, example_currency_rates_file_path: str, enable_logging: bool = True
+    ):
         self.example_currency_rates_file_path = example_currency_rates_file_path
-        self.api_connector = NBPApiConnector()
+        self.api_connector = NBPApiConnector(enable_logging=enable_logging)
 
     def get_currency_rates_data(self, source: str, currency: str) -> dict:
         if source == "local":

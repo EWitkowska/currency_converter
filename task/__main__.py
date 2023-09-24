@@ -2,7 +2,7 @@ from pathlib import Path
 from task.currency_utils import CurrencyDataFetcher
 from task.connectors.database.json import JsonFileDatabaseConnector
 from task.connectors.database.sqlite import SqliteDatabaseConnector
-from task.currency_converter import PriceCurrencyConverterToPLN
+from .currency_converter import PriceCurrencyConverterToPLN
 from .arguments import ArgumentParser
 from .logger import CustomLogger
 
@@ -56,6 +56,9 @@ def main():
 
         if retrieved_data:
             print(f"\nConversion price in PLN: {retrieved_data['price_in_pln']}\n")
+            print(
+                f"Latest rate: {retrieved_data['rate']} on {retrieved_data['date']}\n"
+            )
         else:
             print("\nFailed to retrieve saved data\n")
 
