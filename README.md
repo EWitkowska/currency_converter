@@ -26,15 +26,19 @@ To run the script, execute it with the desired mode and input parameters:
 
 ```bash
 python -m task --mode <mode> --source <source>
+```
 
 **Examples:**
 
-```bash
 # Example 1: Using local JSON data in development mode
+```bash
 python -m task --mode dev --source local
+```
 
 # Example 2: Using NBP API data in production mode
+```bash
 python -m task --mode prod --source api
+```
 
 ### Requirements
 
@@ -47,3 +51,4 @@ Navigate to the project directory in your terminal and run the following command
 
 ```bash
 pip install -r requirements.txt
+```
